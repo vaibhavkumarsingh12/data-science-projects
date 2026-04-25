@@ -1,0 +1,6 @@
+# SQLite runtime artifacts
+*.db-shm
+*.db-wal
+
+# DB Code notebooks
+*.dbcnb
