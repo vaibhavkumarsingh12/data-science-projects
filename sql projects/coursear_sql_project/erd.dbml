@@ -1,0 +1,79 @@
+Table state_dim {
+  State_ANSI integer [pk]
+  Geo_Level text
+}
+
+Table commodity_dim {
+  Commodity_ID integer [pk]
+  Commodity_Name text
+}
+
+Table cheese_production {
+  Record_ID integer [pk, increment]
+  Year integer
+  Period text
+  State_ANSI integer
+  Commodity_ID integer
+  Domain text
+  Value integer
+}
+
+Table honey_production {
+  Record_ID integer [pk, increment]
+  Year integer
+  State_ANSI integer
+  Commodity_ID integer
+  Value integer
+}
+
+Table milk_production {
+  Record_ID integer [pk, increment]
+  Year integer
+  Period text
+  State_ANSI integer
+  Commodity_ID integer
+  Domain text
+  Value integer
+}
+
+Table coffee_production {
+  Record_ID integer [pk, increment]
+  Year integer
+  Period text
+  State_ANSI integer
+  Commodity_ID integer
+  Value integer
+}
+
+Table egg_production {
+  Record_ID integer [pk, increment]
+  Year integer
+  Period text
+  State_ANSI integer
+  Commodity_ID integer
+  Value integer
+}
+
+Table yogurt_production {
+  Record_ID integer [pk, increment]
+  Year integer
+  Period text
+  State_ANSI integer
+  Commodity_ID integer
+  Domain text
+  Value integer
+}
+
+Ref: cheese_production.State_ANSI > state_dim.State_ANSI
+Ref: honey_production.State_ANSI > state_dim.State_ANSI
+Ref: milk_production.State_ANSI > state_dim.State_ANSI
+Ref: coffee_production.State_ANSI > state_dim.State_ANSI
+Ref: egg_production.State_ANSI > state_dim.State_ANSI
+Ref: yogurt_production.State_ANSI > state_dim.State_ANSI
+
+Ref: cheese_production.Commodity_ID > commodity_dim.Commodity_ID
+Ref: honey_production.Commodity_ID > commodity_dim.Commodity_ID
+Ref: milk_production.Commodity_ID > commodity_dim.Commodity_ID
+Ref: coffee_production.Commodity_ID > commodity_dim.Commodity_ID
+Ref: egg_production.Commodity_ID > commodity_dim.Commodity_ID
+Ref: yogurt_production.Commodity_ID > commodity_dim.Commodity_ID

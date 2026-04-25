@@ -1,0 +1,90 @@
+# Production Database ER Diagram
+
+```mermaid
+erDiagram
+    STATE_DIM ||--o{ CHEESE_PRODUCTION : has
+    STATE_DIM ||--o{ HONEY_PRODUCTION : has
+    STATE_DIM ||--o{ MILK_PRODUCTION : has
+    STATE_DIM ||--o{ COFFEE_PRODUCTION : has
+    STATE_DIM ||--o{ EGG_PRODUCTION : has
+    STATE_DIM ||--o{ YOGURT_PRODUCTION : has
+
+    COMMODITY_DIM ||--o{ CHEESE_PRODUCTION : classifies
+    COMMODITY_DIM ||--o{ HONEY_PRODUCTION : classifies
+    COMMODITY_DIM ||--o{ MILK_PRODUCTION : classifies
+    COMMODITY_DIM ||--o{ COFFEE_PRODUCTION : classifies
+    COMMODITY_DIM ||--o{ EGG_PRODUCTION : classifies
+    COMMODITY_DIM ||--o{ YOGURT_PRODUCTION : classifies
+
+    STATE_DIM {
+        int State_ANSI PK
+        string Geo_Level
+    }
+
+    COMMODITY_DIM {
+        int Commodity_ID PK
+        string Commodity_Name
+    }
+
+    CHEESE_PRODUCTION {
+        int Record_ID PK
+        int Year
+        string Period
+        int State_ANSI FK
+        int Commodity_ID FK
+        string Domain
+        int Value
+    }
+
+    HONEY_PRODUCTION {
+        int Record_ID PK
+        int Year
+        int State_ANSI FK
+        int Commodity_ID FK
+        int Value
+    }
+
+    MILK_PRODUCTION {
+        int Record_ID PK
+        int Year
+        string Period
+        int State_ANSI FK
+        int Commodity_ID FK
+        string Domain
+        int Value
+    }
+
+    COFFEE_PRODUCTION {
+        int Record_ID PK
+        int Year
+        string Period
+        int State_ANSI FK
+        int Commodity_ID FK
+        int Value
+    }
+
+    EGG_PRODUCTION {
+        int Record_ID PK
+        int Year
+        string Period
+        int State_ANSI FK
+        int Commodity_ID FK
+        int Value
+    }
+
+    YOGURT_PRODUCTION {
+        int Record_ID PK
+        int Year
+        string Period
+        int State_ANSI FK
+        int Commodity_ID FK
+        string Domain
+        int Value
+    }
+```
+
+## How To View In VS Code
+
+1. Open this file.
+2. Press Ctrl+Shift+V to open Markdown Preview.
+3. The ER diagram renders directly in VS Code.

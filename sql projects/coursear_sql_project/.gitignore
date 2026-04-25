@@ -1,0 +1,14 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+
+# SQLite runtime artifacts
+*.db-shm
+*.db-wal
+
+# DB Code notebook artifacts
+*.dbcnb
+
+# Python cache (if added later)
+__pycache__/
+*.pyc
