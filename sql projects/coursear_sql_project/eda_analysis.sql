@@ -1,19 +1,21 @@
 -- EDA (Exploratory Data Analysis) queries for production datasets
 
+DROP VIEW IF EXISTS eda_all_data;
+CREATE TEMP VIEW eda_all_data AS
+SELECT 'cheese' AS commodity, Year, State_ANSI, Value FROM cheese_production
+UNION ALL
+SELECT 'honey', Year, State_ANSI, Value FROM honey_production
+UNION ALL
+SELECT 'milk', Year, State_ANSI, Value FROM milk_production
+UNION ALL
+SELECT 'coffee', Year, State_ANSI, Value FROM coffee_production
+UNION ALL
+SELECT 'egg', Year, State_ANSI, Value FROM egg_production
+UNION ALL
+SELECT 'yogurt', Year, State_ANSI, Value FROM yogurt_production;
+
 -- 1) Dataset coverage by commodity (records, year range, states)
-WITH all_data AS (
-    SELECT 'cheese' AS commodity, Year, State_ANSI, Value FROM cheese_production
-    UNION ALL
-    SELECT 'honey', Year, State_ANSI, Value FROM honey_production
-    UNION ALL
-    SELECT 'milk', Year, State_ANSI, Value FROM milk_production
-    UNION ALL
-    SELECT 'coffee', Year, State_ANSI, Value FROM coffee_production
-    UNION ALL
-    SELECT 'egg', Year, State_ANSI, Value FROM egg_production
-    UNION ALL
-    SELECT 'yogurt', Year, State_ANSI, Value FROM yogurt_production
-), typed_data AS (
+WITH typed_data AS (
     SELECT
         commodity,
         Year,
@@ -23,7 +25,7 @@ WITH all_data AS (
              AND TRIM(Value) NOT GLOB '*[^0-9]*'
             THEN CAST(TRIM(Value) AS INTEGER)
         END AS value_num
-    FROM all_data
+    FROM eda_all_data
 )
 SELECT
     commodity,
@@ -59,19 +61,7 @@ SELECT 'yogurt', COUNT(*) FROM yogurt_production
 WHERE Year IS NULL OR State_ANSI IS NULL OR Value IS NULL;
 
 -- 3) Annual trend across all commodities
-WITH all_data AS (
-    SELECT 'cheese' AS commodity, Year, Value FROM cheese_production
-    UNION ALL
-    SELECT 'honey', Year, Value FROM honey_production
-    UNION ALL
-    SELECT 'milk', Year, Value FROM milk_production
-    UNION ALL
-    SELECT 'coffee', Year, Value FROM coffee_production
-    UNION ALL
-    SELECT 'egg', Year, Value FROM egg_production
-    UNION ALL
-    SELECT 'yogurt', Year, Value FROM yogurt_production
-), typed_data AS (
+WITH typed_data AS (
     SELECT
         commodity,
         Year,
@@ -80,7 +70,7 @@ WITH all_data AS (
              AND TRIM(Value) NOT GLOB '*[^0-9]*'
             THEN CAST(TRIM(Value) AS INTEGER)
         END AS value_num
-    FROM all_data
+    FROM eda_all_data
 )
 SELECT
     Year,
@@ -91,84 +81,23 @@ GROUP BY Year, commodity
 ORDER BY Year, commodity;
 
 -- 4) Top states by average production value in each commodity
-WITH state_avg AS (
+WITH typed_data AS (
     SELECT
-        'cheese' AS commodity,
+        commodity,
         State_ANSI,
-        AVG(
-            CASE
-                WHEN TRIM(Value) <> ''
-                 AND TRIM(Value) NOT GLOB '*[^0-9]*'
-                THEN CAST(TRIM(Value) AS INTEGER)
-            END
-        ) AS avg_value
-    FROM cheese_production
-    GROUP BY State_ANSI
-    UNION ALL
+        CASE
+            WHEN TRIM(Value) <> ''
+             AND TRIM(Value) NOT GLOB '*[^0-9]*'
+            THEN CAST(TRIM(Value) AS INTEGER)
+        END AS value_num
+    FROM eda_all_data
+), state_avg AS (
     SELECT
-        'honey',
+        commodity,
         State_ANSI,
-        AVG(
-            CASE
-                WHEN TRIM(Value) <> ''
-                 AND TRIM(Value) NOT GLOB '*[^0-9]*'
-                THEN CAST(TRIM(Value) AS INTEGER)
-            END
-        )
-    FROM honey_production
-    GROUP BY State_ANSI
-    UNION ALL
-    SELECT
-        'milk',
-        State_ANSI,
-        AVG(
-            CASE
-                WHEN TRIM(Value) <> ''
-                 AND TRIM(Value) NOT GLOB '*[^0-9]*'
-                THEN CAST(TRIM(Value) AS INTEGER)
-            END
-        )
-    FROM milk_production
-    GROUP BY State_ANSI
-    UNION ALL
-    SELECT
-        'coffee',
-        State_ANSI,
-        AVG(
-            CASE
-                WHEN TRIM(Value) <> ''
-                 AND TRIM(Value) NOT GLOB '*[^0-9]*'
-                THEN CAST(TRIM(Value) AS INTEGER)
-            END
-        )
-    FROM coffee_production
-    GROUP BY State_ANSI
-    UNION ALL
-    SELECT
-        'egg',
-        State_ANSI,
-        AVG(
-            CASE
-                WHEN TRIM(Value) <> ''
-                 AND TRIM(Value) NOT GLOB '*[^0-9]*'
-                THEN CAST(TRIM(Value) AS INTEGER)
-            END
-        )
-    FROM egg_production
-    GROUP BY State_ANSI
-    UNION ALL
-    SELECT
-        'yogurt',
-        State_ANSI,
-        AVG(
-            CASE
-                WHEN TRIM(Value) <> ''
-                 AND TRIM(Value) NOT GLOB '*[^0-9]*'
-                THEN CAST(TRIM(Value) AS INTEGER)
-            END
-        )
-    FROM yogurt_production
-    GROUP BY State_ANSI
+        AVG(value_num) AS avg_value
+    FROM typed_data
+    GROUP BY commodity, State_ANSI
 ), ranked AS (
     SELECT
         commodity,
