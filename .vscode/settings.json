@@ -1,0 +1,5 @@
+{
+    "editor.inlineCompletionsAccessibilityVerbose": true,
+    "diffEditor.experimental.useTrueInlineView": true,
+    "editor.inlineSuggest.suppressSuggestions": true
+}
