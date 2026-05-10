@@ -1,112 +1,109 @@
-
-# Tableau Complete Learning Roadmap
-
 ```mermaid
 mindmap
   root((Tableau Course))
 
     Basics
-      Big Data Terms
-      Business Intelligence
-      Data Visualization
-      Excel vs BI Tools
-      Top BI Tools
-      What is Tableau
-      Why Tableau
+      Big_Data_Terms
+      Business_Intelligence
+      Data_Visualization
+      Excel_vs_BI_Tools
+      Top_BI_Tools
+      What_is_Tableau
+      Why_Tableau
 
-    Tableau Products Suite
-      Development Products
-      Sharing Process
-      Hosting Models
-      Sharing Products
+    Products_Suite
+      Development_Products
+      Sharing_Process
+      Hosting_Models
+      Sharing_Products
 
-    Tableau Architecture
-      Live vs Extract
-      Tableau File Types
-      Desktop Architecture
-      Server Architecture
+    Architecture
+      Live_vs_Extract
+      Tableau_File_Types
+      Desktop_Architecture
+      Server_Architecture
 
-    Prepare Environment
-      Install Tableau Public
-      Create Account
-      Get Datasets
-      Publish First Viz
-      Tableau Interface
+    Prepare_Environment
+      Install_Tableau_Public
+      Create_Account
+      Get_Datasets
+      Publish_First_Viz
+      Tableau_Interface
 
-    Combining Data
-      Data Modeling
-      Logical Layer
-      Physical Layer
+    Combining_Data
+      Data_Modeling
+      Logical_Layer
+      Physical_Layer
       Joins
       Union
       Relationships
-      Data Blending
+      Data_Blending
 
-    Tableau Metadata
-      Data Types
-      Geographic Roles
-      Image Roles
-      Dimensions vs Measures
-      Discrete vs Continuous
+    Metadata
+      Data_Types
+      Geographic_Roles
+      Image_Roles
+      Dimensions_vs_Measures
+      Discrete_vs_Continuous
 
-    Renaming and Aliases
-      Naming Conventions
-      Renaming Fields
+    Renaming_and_Aliases
+      Naming_Conventions
+      Renaming_Fields
       Aliases
 
-    Organizing Data
+    Organizing_Data
       Hierarchies
       Groups
-      Cluster Groups
+      Cluster_Groups
       Sets
       Bins
       Histograms
 
-    Filtering and Sorting
-      Tableau Filters
-      Filter Creation
-      Filter Customization
+    Filtering_and_Sorting
+      Tableau_Filters
+      Filter_Creation
+      Filter_Customization
 
-    Tableau Parameters
-      Dynamic Inputs
-      Interactive Controls
-      Parameter Calculations
+    Parameters
+      Dynamic_Inputs
+      Interactive_Controls
+      Parameter_Calculations
 
-    Tableau Actions
-      Filter Actions
-      Highlight Actions
-      URL Actions
-      Set Actions
-      Parameter Actions
+    Actions
+      Filter_Actions
+      Highlight_Actions
+      URL_Actions
+      Set_Actions
+      Parameter_Actions
 
-    Tableau Calculations
-      Number Functions
-      String Functions
-      Date Functions
-      Null Functions
-      Logical Functions
-      Aggregate Functions
-      ATTR()
-      FIXED LOD
-      INCLUDE LOD
-      EXCLUDE LOD
+    Calculations
+      Number_Functions
+      String_Functions
+      Date_Functions
+      Null_Functions
+      Logical_Functions
+      Aggregate_Functions
+      ATTR_Function
+      FIXED_LOD
+      INCLUDE_LOD
+      EXCLUDE_LOD
 
-    Tableau Charts
-      Bar Chart
-      Line Chart
-      Pie Chart
-      Scatter Plot
+    Charts
+      Bar_Charts
+      Line_Charts
+      Pie_Charts
+      Scatter_Plots
       Maps
       Treemaps
 
-    Tableau Dashboards
-      Layout Design
+    Dashboards
+      Layout_Design
       Containers
-      Device Designer
+      Device_Designer
       Storytelling
 
-    Tableau Project
-      End-to-End Dashboard
-      Publish Project
-      Portfolio Ready
+    Project
+      End_to_End_Dashboard
+      Publish_Project
+      Portfolio_Ready
 ```
