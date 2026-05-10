@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau Course Mind Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Rajdhani:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e2235;
+    font-family: 'Exo 2', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #canvas-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  svg#mindmap {
+    width: 100%;
+    height: 100%;
+  }
+
+  .node-label {
+    cursor: default;
+    user-select: none;
+  }
+
+  .node-box {
+    rx: 6;
+    ry: 6;
+    cursor: default;
+  }
+
+  .dot-btn {
+    cursor: pointer;
+    transition: r 0.2s;
+  }
+  .dot-btn:hover circle {
+    r: 10;
+  }
+
+  /* Panel */
+  #panel {
+    position: fixed;
+    top: 0; right: -480px;
+    width: 460px;
+    height: 100vh;
+    background: #12151f;
+    border-left: 2px solid #ffffff22;
+    overflow-y: auto;
+    transition: right 0.4s cubic-bezier(0.22,1,0.36,1);
+    z-index: 100;
+    padding: 0;
+  }
+  #panel.open { right: 0; }
+
+  #panel-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid #ffffff15;
+    position: sticky;
+    top: 0;
+    background: #12151f;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #panel-color-bar {
+    width: 5px;
+    height: 40px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  #panel-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  #close-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+  }
+  #close-btn:hover { color: #fff; background: #ffffff15; }
+
+  #panel-body { padding: 16px 24px 32px; }
+
+  .topic-item {
+    margin-bottom: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ffffff10;
+  }
+
+  .topic-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    background: #1a1f30;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .topic-header:hover { background: #222840; }
+
+  .topic-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .topic-name {
+    font-size: 13.5px;
+    color: #d0d8f0;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .topic-time {
+    font-size: 11px;
+    color: #5a6480;
+    font-family: monospace;
+  }
+
+  .topic-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 14px 10px 32px;
+    font-size: 12px;
+    color: #5a7aff;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: #5a7aff12;
+    border: 1px solid #5a7aff30;
+    transition: background 0.2s;
+  }
+  .topic-link:hover { background: #5a7aff25; }
+
+  .section-desc {
+    font-size: 12.5px;
+    color: #6a7090;
+    padding: 6px 14px 12px 32px;
+    line-height: 1.6;
+  }
+
+  /* Center label */
+  .center-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    fill: #ffffff;
+    font-size: 20px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    letter-spacing: 1.5px;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div id="canvas-container">
+<svg id="mindmap" viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- CENTER NODE -->
+  <rect x="430" y="306" width="240" height="68" rx="10" ry="10" fill="#1e2a3a" stroke="#4488cc" stroke-width="2"/>
+  <text x="550" y="340" class="center-text">Tableau Course</text>
+
+  <!-- ===== LEFT BRANCHES ===== -->
+  <!-- 1: Basics -->
+  <path d="M430,330 C350,300 280,180 200,140" fill="none" stroke="#e84a7e" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="60" y="115" width="140" height="36" rx="6" fill="none" stroke="#e84a7e" stroke-width="2"/>
+  <text x="130" y="137" text-anchor="middle" fill="#e84a7e" font-family="Exo 2" font-size="13.5" font-weight="600">Basics</text>
+  <g class="dot-btn" onclick="openPanel('basics')" filter="url(#glow)">
+    <circle cx="50" cy="133" r="7" fill="#e84a7e"/>
+    <circle cx="50" cy="133" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 2: Tableau Products Suite -->
+  <path d="M430,332 C370,310 290,240 210,220" fill="none" stroke="#f0c030" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="40" y="198" width="175" height="36" rx="6" fill="none" stroke="#f0c030" stroke-width="2"/>
+  <text x="128" y="220" text-anchor="middle" fill="#f0c030" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Products Suite</text>
+  <g class="dot-btn" onclick="openPanel('products')" filter="url(#glow)">
+    <circle cx="27" cy="216" r="7" fill="#f0c030"/>
+    <circle cx="27" cy="216" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 3: Tableau Architecture -->
+  <path d="M430,338 C370,330 290,300 210,296" fill="none" stroke="#e06020" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="50" y="274" width="165" height="36" rx="6" fill="none" stroke="#e06020" stroke-width="2"/>
+  <text x="133" y="296" text-anchor="middle" fill="#e06020" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Architecture</text>
+  <g class="dot-btn" onclick="openPanel('architecture')" filter="url(#glow)">
+    <circle cx="37" cy="292" r="7" fill="#e06020"/>
+    <circle cx="37" cy="292" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 4: Prepare the Environment -->
+  <path d="M432,350 C370,360 290,360 210,368" fill="none" stroke="#e84a7e" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="40" y="348" width="175" height="36" rx="6" fill="none" stroke="#e84a7e" stroke-width="2"/>
+  <text x="128" y="370" text-anchor="middle" fill="#e84a7e" font-family="Exo 2" font-size="13.5" font-weight="600">Prepare the Environment</text>
+  <g class="dot-btn" onclick="openPanel('prepare')" filter="url(#glow)">
+    <circle cx="27" cy="366" r="7" fill="#e84a7e"/>
+    <circle cx="27" cy="366" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 5: Combining Data -->
+  <path d="M432,358 C370,390 290,420 210,440" fill="none" stroke="#8855cc" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="40" y="418" width="185" height="36" rx="6" fill="none" stroke="#8855cc" stroke-width="2"/>
+  <text x="133" y="440" text-anchor="middle" fill="#8855cc" font-family="Exo 2" font-size="13.5" font-weight="600">Combining Data | Data Model</text>
+  <g class="dot-btn" onclick="openPanel('combining')" filter="url(#glow)">
+    <circle cx="27" cy="436" r="7" fill="#8855cc"/>
+    <circle cx="27" cy="436" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 6: Tableau Metadata -->
+  <path d="M432,362 C380,430 310,490 230,508" fill="none" stroke="#4477dd" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="60" y="490" width="160" height="36" rx="6" fill="none" stroke="#4477dd" stroke-width="2"/>
+  <text x="140" y="512" text-anchor="middle" fill="#4477dd" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Metadata</text>
+  <g class="dot-btn" onclick="openPanel('metadata')" filter="url(#glow)">
+    <circle cx="47" cy="508" r="7" fill="#4477dd"/>
+    <circle cx="47" cy="508" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 7: Renaming & Aliases -->
+  <path d="M440,368 C400,460 350,540 290,568" fill="none" stroke="#44bb44" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="130" y="554" width="165" height="36" rx="6" fill="none" stroke="#44bb44" stroke-width="2"/>
+  <text x="213" y="576" text-anchor="middle" fill="#44bb44" font-family="Exo 2" font-size="13.5" font-weight="600">Renaming &amp; Aliases</text>
+  <g class="dot-btn" onclick="openPanel('renaming')" filter="url(#glow)">
+    <circle cx="117" cy="572" r="7" fill="#44bb44"/>
+    <circle cx="117" cy="572" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 8: Organizing Data -->
+  <path d="M460,374 C450,480 430,570 390,608" fill="none" stroke="#00cccc" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="270" y="600" width="148" height="36" rx="6" fill="none" stroke="#00cccc" stroke-width="2"/>
+  <text x="344" y="622" text-anchor="middle" fill="#00cccc" font-family="Exo 2" font-size="13.5" font-weight="600">Organizing Data</text>
+  <g class="dot-btn" onclick="openPanel('organizing')" filter="url(#glow)">
+    <circle cx="257" cy="618" r="7" fill="#00cccc"/>
+    <circle cx="257" cy="618" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- ===== RIGHT BRANCHES ===== -->
+  <!-- 9: Filtering & Sorting -->
+  <path d="M670,325 C750,290 830,195 910,170" fill="none" stroke="#00cccc" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="895" y="148" width="200" height="36" rx="6" fill="none" stroke="#00cccc" stroke-width="2"/>
+  <text x="995" y="170" text-anchor="middle" fill="#00cccc" font-family="Exo 2" font-size="13.5" font-weight="600">Filtering &amp; Sorting Data</text>
+  <g class="dot-btn" onclick="openPanel('filtering')" filter="url(#glow)">
+    <circle cx="1093" cy="166" r="7" fill="#00cccc"/>
+    <circle cx="1093" cy="166" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 10: Tableau Parameters -->
+  <path d="M670,332 C760,310 840,254 920,242" fill="none" stroke="#e84a7e" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="905" y="220" width="185" height="36" rx="6" fill="none" stroke="#e84a7e" stroke-width="2"/>
+  <text x="998" y="242" text-anchor="middle" fill="#e84a7e" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Parameters</text>
+  <g class="dot-btn" onclick="openPanel('parameters')" filter="url(#glow)">
+    <circle cx="1088" cy="238" r="7" fill="#e84a7e"/>
+    <circle cx="1088" cy="238" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 11: Tableau Actions -->
+  <path d="M670,340 C770,330 860,308 930,308" fill="none" stroke="#f0a020" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="920" y="288" width="158" height="36" rx="6" fill="none" stroke="#f0a020" stroke-width="2"/>
+  <text x="999" y="310" text-anchor="middle" fill="#f0a020" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Actions</text>
+  <g class="dot-btn" onclick="openPanel('actions')" filter="url(#glow)">
+    <circle cx="1076" cy="306" r="7" fill="#f0a020"/>
+    <circle cx="1076" cy="306" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 12: Tableau Calculations -->
+  <path d="M670,348 C770,355 860,368 928,374" fill="none" stroke="#8855cc" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="920" y="354" width="185" height="36" rx="6" fill="none" stroke="#8855cc" stroke-width="2"/>
+  <text x="1013" y="376" text-anchor="middle" fill="#8855cc" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Calculations</text>
+  <g class="dot-btn" onclick="openPanel('calculations')" filter="url(#glow)">
+    <circle cx="1103" cy="372" r="7" fill="#8855cc"/>
+    <circle cx="1103" cy="372" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 13: Tableau Charts -->
+  <path d="M668,356 C760,380 840,424 916,440" fill="none" stroke="#e06020" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="908" y="420" width="148" height="36" rx="6" fill="none" stroke="#e06020" stroke-width="2"/>
+  <text x="982" y="442" text-anchor="middle" fill="#e06020" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Charts</text>
+  <g class="dot-btn" onclick="openPanel('charts')" filter="url(#glow)">
+    <circle cx="1054" cy="438" r="7" fill="#e06020"/>
+    <circle cx="1054" cy="438" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 14: Tableau Dashboards -->
+  <path d="M660,362 C740,410 820,488 892,508" fill="none" stroke="#88cc00" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="882" y="490" width="185" height="36" rx="6" fill="none" stroke="#88cc00" stroke-width="2"/>
+  <text x="975" y="512" text-anchor="middle" fill="#88cc00" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Dashboards</text>
+  <g class="dot-btn" onclick="openPanel('dashboards')" filter="url(#glow)">
+    <circle cx="1065" cy="508" r="7" fill="#88cc00"/>
+    <circle cx="1065" cy="508" r="4" fill="#12151f"/>
+  </g>
+
+  <!-- 15: Tableau Project -->
+  <path d="M640,368 C700,440 750,540 800,572" fill="none" stroke="#8855cc" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="798" y="556" width="150" height="36" rx="6" fill="none" stroke="#8855cc" stroke-width="2"/>
+  <text x="873" y="578" text-anchor="middle" fill="#8855cc" font-family="Exo 2" font-size="13.5" font-weight="600">Tableau Project</text>
+  <g class="dot-btn" onclick="openPanel('project')" filter="url(#glow)">
+    <circle cx="946" cy="574" r="7" fill="#8855cc"/>
+    <circle cx="946" cy="574" r="4" fill="#12151f"/>
+  </g>
+</svg>
+</div>
+
+<!-- SIDE PANEL -->
+<div id="panel">
+  <div id="panel-header">
+    <div id="panel-color-bar"></div>
+    <div id="panel-title">Section</div>
+    <button id="close-btn" onclick="closePanel()">✕</button>
+  </div>
+  <div id="panel-body"></div>
+</div>
+
+<script>
+const BASE = "https://www.youtube.com/watch?v=K3pXnbniUcM";
+const t = s => `${BASE}&t=${s}s`;
+
+const sections = {
+  basics: {
+    title: "Section 1: Tableau Basics",
+    color: "#e84a7e",
+    desc: "Foundational concepts: what Tableau is, where it fits in the data ecosystem, and why it's the industry's top BI tool.",
+    topics: [
+      { name: "Big Data Terms", time: "00:08:37", ts: 517 },
+      { name: "What is Business Intelligence (BI)", time: "00:16:54", ts: 1014 },
+      { name: "What is Data Visualization", time: "00:19:34", ts: 1174 },
+      { name: "Excel vs BI-Tools", time: "00:22:50", ts: 1370 },
+      { name: "Top 3 BI-Tools", time: "00:31:28", ts: 1888 },
+      { name: "What is Tableau", time: "00:32:22", ts: 1942 },
+      { name: "Why Tableau", time: "00:34:50", ts: 2090 },
+    ]
+  },
+  products: {
+    title: "Section 2: Tableau Products Suite",
+    color: "#f0c030",
+    desc: "A full walkthrough of Tableau's product ecosystem — from development tools to hosting and sharing solutions.",
+    topics: [
+      { name: "Tableau Development Products", time: "00:39:54", ts: 2394 },
+      { name: "Tableau Sharing Process", time: "00:43:36", ts: 2616 },
+      { name: "Tableau Hosting (OnPrem, IaaS, SaaS)", time: "00:54:26", ts: 3266 },
+      { name: "Tableau Sharing Products", time: "01:00:24", ts: 3624 },
+    ]
+  },
+  architecture: {
+    title: "Section 3: Tableau Architecture",
+    color: "#e06020",
+    desc: "Understand how Tableau connects to data, manages files, and organizes its Desktop and Server architectures.",
+    topics: [
+      { name: "Live vs Extract", time: "01:12:46", ts: 4366 },
+      { name: "Tableau File Types", time: "01:14:48", ts: 4488 },
+      { name: "Tableau Desktop Architecture", time: "01:19:16", ts: 4756 },
+      { name: "Tableau Server Architecture", time: "01:26:39", ts: 5199 },
+    ]
+  },
+  prepare: {
+    title: "Section 4: Prepare the Environment",
+    color: "#e84a7e",
+    desc: "Hands-on setup: install Tableau Public, create an account, get datasets, publish your first viz, and tour the interface.",
+    topics: [
+      { name: "Download & Install Tableau Public", time: "01:48:44", ts: 6524 },
+      { name: "Create Tableau Public Account", time: "01:50:06", ts: 6606 },
+      { name: "Get Training Datasets", time: "01:51:26", ts: 6686 },
+      { name: "Publish First Viz", time: "01:57:18", ts: 7038 },
+      { name: "Tour into the Tableau Interface", time: "01:59:33", ts: 7173 },
+    ]
+  },
+  combining: {
+    title: "Section 5: Combining Data | Data Model",
+    color: "#8855cc",
+    desc: "Deep dive into Tableau's data model — joins, unions, relationships, blending, and the logical/physical layer distinction.",
+    topics: [
+      { name: "Basics Data Modeling", time: "02:13:51", ts: 8031 },
+      { name: "Logical & Physical Layers", time: "02:19:57", ts: 8397 },
+      { name: "Joins", time: "02:25:07", ts: 8707 },
+      { name: "Union", time: "02:33:59", ts: 9239 },
+      { name: "Relationships", time: "02:40:54", ts: 9654 },
+      { name: "Data Blending", time: "02:57:28", ts: 10648 },
+      { name: "Summary: Combining Methods", time: "03:15:57", ts: 11757 },
+    ]
+  },
+  metadata: {
+    title: "Section 6: Tableau Metadata",
+    color: "#4477dd",
+    desc: "Master how Tableau interprets your data — types, roles, dimensions vs measures, discrete vs continuous fields.",
+    topics: [
+      { name: "Data Types", time: "03:29:42", ts: 12582 },
+      { name: "Geographic & Image Roles", time: "03:48:35", ts: 13715 },
+      { name: "Dimensions & Measures", time: "03:53:18", ts: 13998 },
+      { name: "Discrete vs Continuous", time: "04:10:57", ts: 15057 },
+      { name: "Summary: Tableau Metadata", time: "04:25:34", ts: 15934 },
+    ]
+  },
+  renaming: {
+    title: "Section 7: Renaming & Aliases",
+    color: "#44bb44",
+    desc: "Clean up your data layer with naming conventions, field renaming, and aliases for cleaner dashboards.",
+    topics: [
+      { name: "Naming Conventions", time: "04:27:50", ts: 16070 },
+      { name: "Renaming", time: "04:38:28", ts: 16708 },
+      { name: "Aliases", time: "04:48:46", ts: 17326 },
+    ]
+  },
+  organizing: {
+    title: "Section 8: Organizing Data",
+    color: "#00cccc",
+    desc: "Structure your data with hierarchies, groups, cluster groups, sets, bins, and histograms.",
+    topics: [
+      { name: "Hierarchy", time: "04:58:13", ts: 17893 },
+      { name: "Groups", time: "05:16:03", ts: 18963 },
+      { name: "Cluster Group", time: "05:28:57", ts: 19737 },
+      { name: "Sets", time: "05:38:37", ts: 20317 },
+      { name: "Bins & Histograms", time: "06:02:25", ts: 21745 },
+    ]
+  },
+  filtering: {
+    title: "Section 9: Filtering & Sorting Data",
+    color: "#00cccc",
+    desc: "Control what data is shown: understand the filter pipeline, create filters of all types, and customize filter controls.",
+    topics: [
+      { name: "Understand Tableau Filters", time: "06:13:40", ts: 22420 },
+      { name: "How to Create Filters", time: "06:25:11", ts: 23111 },
+      { name: "Customizing Filters", time: "06:48:05", ts: 24485 },
+    ]
+  },
+  parameters: {
+    title: "Section 10: Tableau Parameters",
+    color: "#e84a7e",
+    desc: "Dynamic inputs that give users control over calculations, filters, and reference lines — a key power feature.",
+    topics: [
+      { name: "Tableau Parameters (Full Section)", time: "08:03:50", ts: 29030 },
+    ]
+  },
+  actions: {
+    title: "Section 11: Tableau Actions",
+    color: "#f0a020",
+    desc: "Interactivity through actions: filter, highlight, URL, set, and parameter actions that link sheets and dashboards.",
+    topics: [
+      { name: "Tableau Actions (Full Section)", time: "08:32:09", ts: 30729 },
+    ]
+  },
+  calculations: {
+    title: "Section 12: Tableau Calculations",
+    color: "#8855cc",
+    desc: "From basic row-level calc to powerful LOD expressions — every calculation type Tableau offers, with functions for numbers, strings, dates, nulls, logic, and aggregation.",
+    topics: [
+      { name: "Types of Tableau Calculations", time: "09:31:33", ts: 34293 },
+      { name: "Number Functions", time: "09:53:53", ts: 35633 },
+      { name: "String Functions", time: "10:04:12", ts: 36252 },
+      { name: "Date Functions", time: "11:27:55", ts: 41275 },
+      { name: "Null Functions", time: "12:17:31", ts: 44251 },
+      { name: "Logical Functions", time: "12:30:33", ts: 45033 },
+      { name: "Aggregate Functions", time: "13:16:13", ts: 47773 },
+      { name: "Attribute Function ATTR()", time: "13:35:24", ts: 48924 },
+      { name: "Fixed (LOD)", time: "13:59:29", ts: 50369 },
+      { name: "Exclude (LOD)", time: "14:08:55", ts: 50935 },
+      { name: "Include (LOD)", time: "14:14:26", ts: 51266 },
+    ]
+  },
+  charts: {
+    title: "Section 13: Tableau Charts",
+    color: "#e06020",
+    desc: "Build every chart type Tableau offers — bar, line, scatter, pie, map, treemap, and more — with best practice guidance.",
+    topics: [
+      { name: "Tableau Charts (Full Section)", time: "15:02:51", ts: 54171 },
+    ]
+  },
+  dashboards: {
+    title: "Section 14: Tableau Dashboards",
+    color: "#88cc00",
+    desc: "Design and publish professional dashboards: layout, containers, device designer, and storytelling with data.",
+    topics: [
+      { name: "Tableau Dashboards (Full Section)", time: "17:55:35", ts: 64535 },
+    ]
+  },
+  project: {
+    title: "Section 15: Tableau Project",
+    color: "#8855cc",
+    desc: "Capstone project — apply everything you've learned to build a complete, publish-ready Tableau project from scratch.",
+    topics: [
+      { name: "Tableau Project (Full Section)", time: "18:22:08", ts: 66128 },
+    ]
+  },
+};
+
+function openPanel(key) {
+  const s = sections[key];
+  if (!s) return;
+
+  document.getElementById('panel-title').textContent = s.title;
+  document.getElementById('panel-color-bar').style.background = s.color;
+
+  let html = `<p class="section-desc" style="padding: 4px 0 16px 0; color:#8090b0; font-size:13px; line-height:1.65;">${s.desc}</p>`;
+
+  s.topics.forEach(tp => {
+    const url = `https://www.youtube.com/watch?v=K3pXnbniUcM&t=${tp.ts}s`;
+    html += `
+      <div class="topic-item">
+        <div class="topic-header">
+          <div class="topic-dot" style="background:${s.color}"></div>
+          <span class="topic-name">${tp.name}</span>
+          <span class="topic-time">${tp.time}</span>
+        </div>
+        <a class="topic-link" href="${url}" target="_blank">
+          ▶ Watch on YouTube
+        </a>
+      </div>`;
+  });
+
+  document.getElementById('panel-body').innerHTML = html;
+  document.getElementById('panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('open');
+}
+</script>
+</body>
+</html>
