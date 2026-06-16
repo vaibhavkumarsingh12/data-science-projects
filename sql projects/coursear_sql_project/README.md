@@ -12,6 +12,7 @@ my project/
         ├── create_table.sql
         ├── load_state_lookup.sql
         ├── quries.sql
+        ├── eda_analysis.sql
         ├── cleanup.sql
         ├── production.db
         ├── erd.dbml
@@ -57,6 +58,12 @@ Then run analytical queries:
 
 ```powershell
 sqlite3 production.db ".read quries.sql"
+```
+
+For EDA-focused analysis:
+
+```powershell
+sqlite3 production.db ".read eda_analysis.sql"
 ```
 
 ## Interview Talking Points
